@@ -11,7 +11,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Build;
 import android.util.Log;
-import android.widget.Toast;
 
 public class AppRater {
     // Preference Constants
@@ -35,6 +34,12 @@ public class AppRater {
     private static boolean isCancelable = true;
 
     private static Market market = new GoogleMarket();
+
+    private static int titleRes = R.string.dialog_title;
+    private static int rateMessageRes = R.string.rate_message;
+    private static int rateRes = R.string.rate;
+    private static int noThanksRes = R.string.no_thanks;
+    private static int laterRes = R.string.later;
 
     /**
      * Decides if the version name check is active or not
@@ -248,13 +253,13 @@ public class AppRater {
             builder = new AlertDialog.Builder(context);
         }
         ApplicationRatingInfo ratingInfo = ApplicationRatingInfo.createApplicationInfo(context);
-        builder.setTitle(String.format(context.getString(R.string.dialog_title), ratingInfo.getApplicationName()));
+        builder.setTitle(String.format(context.getString(titleRes), ratingInfo.getApplicationName()));
 
-        builder.setMessage(context.getString(R.string.rate_message));
+        builder.setMessage(context.getString(rateMessageRes));
 
         builder.setCancelable(isCancelable);
 
-        builder.setPositiveButton(context.getString(R.string.rate),
+        builder.setPositiveButton(context.getString(rateRes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         rateNow(context);
@@ -266,7 +271,7 @@ public class AppRater {
                     }
                 });
 
-        builder.setNeutralButton(context.getString(R.string.later),
+        builder.setNeutralButton(context.getString(laterRes),
                 new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int id) {
                         if (editor != null) {
@@ -281,7 +286,7 @@ public class AppRater {
                     }
                 });
         if (!hideNoButton) {
-            builder.setNegativeButton(context.getString(R.string.no_thanks),
+            builder.setNegativeButton(context.getString(noThanksRes),
                     new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int id) {
                             if (editor != null) {
@@ -317,5 +322,25 @@ public class AppRater {
         long date_firstLaunch = System.currentTimeMillis();
         editor.putLong(PREF_FIRST_LAUNCHED, date_firstLaunch);
         commitOrApply(editor);
+    }
+
+    public static void setTitleRes(int titleRes) {
+        AppRater.titleRes = titleRes;
+    }
+
+    public static void setRateMessageRes(int rateMessageRes) {
+        AppRater.rateMessageRes = rateMessageRes;
+    }
+
+    public static void setRateRes(int rateRes) {
+        AppRater.rateRes = rateRes;
+    }
+
+    public static void setNoThanksRes(int noThanksRes) {
+        AppRater.noThanksRes = noThanksRes;
+    }
+
+    public static void setLaterRes(int laterRes) {
+        AppRater.laterRes = laterRes;
     }
 }
